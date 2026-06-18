@@ -1,0 +1,26 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>Employees</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <app-employee-filter
+      [searchTerm]="store.searchTerm()"
+      [statusFilter]="store.statusFilter()"
+      [sortDirection]="store.sortDirection()"
+      (searchChange)="onSearchChange($event)"
+      (statusFilterChange)="store.setStatusFilter($event)"
+      (sortChange)="store.setSortDirection($event)"
+    />
+
+    @if (store.loading()) {
+      <div class="spinner-container">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    } @else {
+      <app-employee-table
+        [employees]="store.filteredEmployees()"
+        (deleteRequest)="onDeleteRequest($event)"
+      />
+    }
+  </mat-card-content>
+</mat-card>

@@ -19,44 +19,8 @@ import { DeleteConfirmDialogComponent } from '../../components/delete-confirm-di
     EmployeeFilterComponent,
     EmployeeTableComponent
   ],
-  template: `
-    <mat-card>
-      <mat-card-header>
-        <mat-card-title>Employees</mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <app-employee-filter
-          [searchTerm]="store.searchTerm()"
-          [statusFilter]="store.statusFilter()"
-          [sortDirection]="store.sortDirection()"
-          (searchChange)="onSearchChange($event)"
-          (statusFilterChange)="store.setStatusFilter($event)"
-          (sortChange)="store.setSortDirection($event)"
-        />
-
-        @if (store.loading()) {
-          <div class="spinner-container">
-            <mat-spinner diameter="40"></mat-spinner>
-          </div>
-        } @else {
-          <app-employee-table
-            [employees]="store.filteredEmployees()"
-            (deleteRequest)="onDeleteRequest($event)"
-          />
-        }
-      </mat-card-content>
-    </mat-card>
-  `,
-  styles: [`
-    .spinner-container {
-      display: flex;
-      justify-content: center;
-      padding: 48px;
-    }
-    mat-card {
-      margin-bottom: 16px;
-    }
-  `]
+  templateUrl: './employee-list.component.html',
+  styleUrl: './employee-list.component.scss'
 })
 export class EmployeeListComponent implements OnInit, OnDestroy {
   readonly store = inject(EmployeeStoreService);
@@ -65,7 +29,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   ngOnInit(): void {
-    this.store.loadEmployees();
+    this.store.loadEmployees().subscribe();
 
     this.searchSubject.pipe(
       debounceTime(300),
@@ -92,7 +56,7 @@ export class EmployeeListComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed) {
-        this.store.deleteEmployee(employee.id);
+        this.store.deleteEmployee(employee.id).subscribe();
       }
     });
   }

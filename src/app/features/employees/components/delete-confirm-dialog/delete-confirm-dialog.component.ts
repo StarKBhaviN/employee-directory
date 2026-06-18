@@ -6,16 +6,8 @@ import { MatButtonModule } from '@angular/material/button';
   selector: 'app-delete-confirm-dialog',
   standalone: true,
   imports: [MatDialogModule, MatButtonModule],
-  template: `
-    <h2 mat-dialog-title>Confirm Delete</h2>
-    <mat-dialog-content>
-      <p>Are you sure you want to delete this employee?</p>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button (click)="dialogRef.close(false)">Cancel</button>
-      <button mat-raised-button color="warn" (click)="dialogRef.close(true)">Delete</button>
-    </mat-dialog-actions>
-  `
+  templateUrl: './delete-confirm-dialog.component.html',
+  styleUrl: './delete-confirm-dialog.component.scss'
 })
 export class DeleteConfirmDialogComponent {
   readonly dialogRef = inject(MatDialogRef<DeleteConfirmDialogComponent>);

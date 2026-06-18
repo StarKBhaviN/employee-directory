@@ -1,0 +1,40 @@
+.details-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px 0;
+}
+.detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.detail-item strong {
+  color: #666;
+  font-size: 12px;
+  text-transform: uppercase;
+}
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  width: fit-content;
+}
+.status-badge.active {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+.status-badge.inactive {
+  background-color: #fbe9e7;
+  color: #c62828;
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  padding: 48px;
+}
+mat-card-actions {
+  padding: 16px !important;
+}

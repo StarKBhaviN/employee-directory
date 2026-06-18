@@ -1,9 +1,9 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
-import { Employee } from '../../features/employees/models/employee.model';
+import { Employee, NewEmployee } from '../../features/employees/models/employee.model';
 import { EmployeeApiService } from './employee-api.service';
 import { LocalStorageService } from './local-storage.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { firstValueFrom } from 'rxjs';
+import { Observable, tap, catchError, of, map } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class EmployeeStoreService {
@@ -52,69 +52,77 @@ export class EmployeeStoreService {
     return employees;
   });
 
-  async loadEmployees(): Promise<void> {
+  loadEmployees(): Observable<Employee[]> {
     this.loadingSignal.set(true);
-    try {
-      const employees = await firstValueFrom(this.api.getAll());
-      this.employeesSignal.set(employees);
-      this.localStorage.saveEmployees(employees);
-    } catch {
-      // Fallback to localStorage
-      const cached = this.localStorage.getEmployees();
-      if (cached.length > 0) {
-        this.employeesSignal.set(cached);
-        this.showMessage('Loaded from local cache');
-      } else {
-        this.showMessage('Failed to load employees', true);
-      }
-    } finally {
-      this.loadingSignal.set(false);
-    }
+    return this.api.getAll().pipe(
+      tap((employees) => {
+        this.employeesSignal.set(employees);
+        this.localStorage.saveEmployees(employees);
+        this.loadingSignal.set(false);
+      }),
+      catchError(() => {
+        const cached = this.localStorage.getEmployees();
+        if (cached.length > 0) {
+          this.employeesSignal.set(cached);
+          this.showMessage('Loaded from local cache');
+        } else {
+          this.showMessage('Failed to load employees', true);
+        }
+        this.loadingSignal.set(false);
+        return of(cached);
+      })
+    );
   }
 
   getEmployeeById(id: string): Employee | undefined {
     return this.employeesSignal().find(e => e.id === id);
   }
 
-  async addEmployee(employee: Omit<Employee, 'id'>): Promise<boolean> {
-    try {
-      const created = await firstValueFrom(this.api.create(employee));
-      this.employeesSignal.update(list => [...list, created]);
-      this.localStorage.saveEmployees(this.employeesSignal());
-      this.showMessage('Employee added successfully');
-      return true;
-    } catch {
-      this.showMessage('Failed to save employee', true);
-      return false;
-    }
+  addEmployee(employee: NewEmployee): Observable<boolean> {
+    return this.api.create(employee).pipe(
+      tap(created => {
+        this.employeesSignal.update(list => [...list, created]);
+        this.localStorage.saveEmployees(this.employeesSignal());
+        this.showMessage('Employee added successfully');
+      }),
+      map(() => true),
+      catchError(() => {
+        this.showMessage('Failed to save employee', true);
+        return of(false);
+      })
+    );
   }
 
-  async updateEmployee(employee: Employee): Promise<boolean> {
-    try {
-      const updated = await firstValueFrom(this.api.update(employee));
-      this.employeesSignal.update(list =>
-        list.map(e => e.id === updated.id ? updated : e)
-      );
-      this.localStorage.saveEmployees(this.employeesSignal());
-      this.showMessage('Employee updated successfully');
-      return true;
-    } catch {
-      this.showMessage('Failed to save employee', true);
-      return false;
-    }
+  updateEmployee(employee: Employee): Observable<boolean> {
+    return this.api.update(employee).pipe(
+      tap(updated => {
+        this.employeesSignal.update(list =>
+          list.map(e => e.id === updated.id ? updated : e)
+        );
+        this.localStorage.saveEmployees(this.employeesSignal());
+        this.showMessage('Employee updated successfully');
+      }),
+      map(() => true),
+      catchError(() => {
+        this.showMessage('Failed to save employee', true);
+        return of(false);
+      })
+    );
   }
 
-  async deleteEmployee(id: string): Promise<boolean> {
-    try {
-      await firstValueFrom(this.api.delete(id));
-      this.employeesSignal.update(list => list.filter(e => e.id !== id));
-      this.localStorage.saveEmployees(this.employeesSignal());
-      this.showMessage('Employee deleted successfully');
-      return true;
-    } catch {
-      this.showMessage('Failed to delete employee', true);
-      return false;
-    }
+  deleteEmployee(id: string): Observable<boolean> {
+    return this.api.delete(id).pipe(
+      tap(() => {
+        this.employeesSignal.update(list => list.filter(e => e.id !== id));
+        this.localStorage.saveEmployees(this.employeesSignal());
+        this.showMessage('Employee deleted successfully');
+      }),
+      map(() => true),
+      catchError(() => {
+        this.showMessage('Failed to delete employee', true);
+        return of(false);
+      })
+    );
   }
 
   setSearchTerm(term: string): void {

@@ -1,0 +1,51 @@
+@if (employee()) {
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>{{ employee()!.fullName }}</mat-card-title>
+      <mat-card-subtitle>Employee Details</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="details-grid">
+        <div class="detail-item">
+          <strong>Employee ID</strong>
+          <span>{{ employee()!.id }}</span>
+        </div>
+        <div class="detail-item">
+          <strong>Full Name</strong>
+          <span>{{ employee()!.fullName }}</span>
+        </div>
+        <div class="detail-item">
+          <strong>Email</strong>
+          <span>{{ employee()!.email }}</span>
+        </div>
+        <div class="detail-item">
+          <strong>Department</strong>
+          <span>{{ employee()!.department }}</span>
+        </div>
+        <div class="detail-item">
+          <strong>Status</strong>
+          <span class="status-badge"
+                [class.active]="employee()!.status === 'Active'"
+                [class.inactive]="employee()!.status === 'Inactive'">
+            {{ employee()!.status }}
+          </span>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-button routerLink="/employees">
+        <mat-icon>arrow_back</mat-icon> Back
+      </button>
+      <button mat-raised-button color="primary" [routerLink]="['/employees', employee()!.id, 'edit']">
+        <mat-icon>edit</mat-icon> Edit
+      </button>
+      <button mat-raised-button color="warn" (click)="onDelete()">
+        <mat-icon>delete</mat-icon> Delete
+      </button>
+    </mat-card-actions>
+  </mat-card>
+} @else {
+  <div class="spinner-container">
+    <mat-spinner diameter="40"></mat-spinner>
+  </div>
+}

@@ -14,101 +14,8 @@ import { DeleteConfirmDialogComponent } from '../../components/delete-confirm-di
   selector: 'app-employee-details',
   standalone: true,
   imports: [RouterLink, MatCardModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
-  template: `
-    @if (employee()) {
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>{{ employee()!.fullName }}</mat-card-title>
-          <mat-card-subtitle>Employee Details</mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="details-grid">
-            <div class="detail-item">
-              <strong>Employee ID</strong>
-              <span>{{ employee()!.id }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Full Name</strong>
-              <span>{{ employee()!.fullName }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Email</strong>
-              <span>{{ employee()!.email }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Department</strong>
-              <span>{{ employee()!.department }}</span>
-            </div>
-            <div class="detail-item">
-              <strong>Status</strong>
-              <span class="status-badge"
-                    [class.active]="employee()!.status === 'Active'"
-                    [class.inactive]="employee()!.status === 'Inactive'">
-                {{ employee()!.status }}
-              </span>
-            </div>
-          </div>
-        </mat-card-content>
-        <mat-card-actions align="end">
-          <button mat-button routerLink="/employees">
-            <mat-icon>arrow_back</mat-icon> Back
-          </button>
-          <button mat-raised-button color="primary" [routerLink]="['/employees', employee()!.id, 'edit']">
-            <mat-icon>edit</mat-icon> Edit
-          </button>
-          <button mat-raised-button color="warn" (click)="onDelete()">
-            <mat-icon>delete</mat-icon> Delete
-          </button>
-        </mat-card-actions>
-      </mat-card>
-    } @else {
-      <div class="spinner-container">
-        <mat-spinner diameter="40"></mat-spinner>
-      </div>
-    }
-  `,
-  styles: [`
-    .details-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      padding: 16px 0;
-    }
-    .detail-item {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-    .detail-item strong {
-      color: #666;
-      font-size: 12px;
-      text-transform: uppercase;
-    }
-    .status-badge {
-      display: inline-block;
-      padding: 4px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 500;
-      width: fit-content;
-    }
-    .status-badge.active {
-      background-color: #e8f5e9;
-      color: #2e7d32;
-    }
-    .status-badge.inactive {
-      background-color: #fbe9e7;
-      color: #c62828;
-    }
-    .spinner-container {
-      display: flex;
-      justify-content: center;
-      padding: 48px;
-    }
-    mat-card-actions {
-      padding: 16px !important;
-    }
-  `]
+  templateUrl: './employee-details.component.html',
+  styleUrl: './employee-details.component.scss'
 })
 export class EmployeeDetailsComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
@@ -125,7 +32,7 @@ export class EmployeeDetailsComponent implements OnInit {
       if (emp) {
         this.employee.set(emp);
       } else {
-        this.store.loadEmployees().then(() => {
+        this.store.loadEmployees().subscribe(() => {
           const loaded = this.store.getEmployeeById(id);
           if (loaded) {
             this.employee.set(loaded);
@@ -144,7 +51,7 @@ export class EmployeeDetailsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (confirmed && this.employee()) {
-        this.store.deleteEmployee(this.employee()!.id).then(success => {
+        this.store.deleteEmployee(this.employee()!.id).subscribe(success => {
           if (success) {
             this.router.navigate(['/employees']);
           }

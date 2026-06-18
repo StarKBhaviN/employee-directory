@@ -1,0 +1,27 @@
+<div class="filter-container">
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>Search by name</mat-label>
+    <input matInput
+           [ngModel]="searchTerm()"
+           (ngModelChange)="searchChange.emit($event)"
+           placeholder="Type employee name...">
+    <mat-icon matSuffix>search</mat-icon>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="status-field">
+    <mat-label>Status</mat-label>
+    <mat-select [ngModel]="statusFilter()" (ngModelChange)="statusFilterChange.emit($event)">
+      <mat-option value="All">All</mat-option>
+      <mat-option value="Active">Active</mat-option>
+      <mat-option value="Inactive">Inactive</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="sort-field">
+    <mat-label>Sort by Name</mat-label>
+    <mat-select [ngModel]="sortDirection()" (ngModelChange)="sortChange.emit($event)">
+      <mat-option value="asc">A-Z</mat-option>
+      <mat-option value="desc">Z-A</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>

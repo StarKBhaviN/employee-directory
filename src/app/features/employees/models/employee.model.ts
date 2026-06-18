@@ -5,3 +5,10 @@ export interface Employee {
   department: string;
   status: 'Active' | 'Inactive';
 }
+
+export interface NewEmployee {
+  fullName: string;
+  email: string;
+  department: string;
+  status: 'Active' | 'Inactive';
+}

@@ -1,6 +1,6 @@
 Employee Directory Project
 
-This is an Angular application for an employee directory. It uses Firebase for the database and also saves to local storage.
+This is an Angular application for an employee directory. It uses JSON Server for a local mock database and also saves to local storage.
 
 Features:
 - View all employees in a list
@@ -16,7 +16,7 @@ Technologies used:
 - Angular 21
 - Angular Material
 - RxJS
-- Firebase
+- JSON Server (Mock API)
 - LocalStorage
 - Signals for state
 - TypeScript
@@ -35,8 +35,8 @@ How to run the project:
 Install everything:
 npm install
 
-Run the app:
-ng serve
+Run the app and mock server concurrently:
+npm run dev
 Then go to http://localhost:4200/
 
 Build:
@@ -47,13 +47,12 @@ ng test
 
 Why I chose these things:
 - Signals: I used Signals because it's the new way in Angular and it's easier to learn.
-- Local storage: I added it just in case Firebase doesn't work, so the app still runs.
+- Local storage: I added it just in case the mock API doesn't work, so the app still runs.
 - Angular Material: I used it because it looks good and is made for Angular.
 - Architecture: I separated the pages from the dumb components to make it cleaner.
 
 Assumptions:
-- Firebase is open without auth
-- Firebase makes the IDs
+- JSON Server handles the database endpoints and automatically generates IDs
 - It's just a simple project
 
 Things to add later:

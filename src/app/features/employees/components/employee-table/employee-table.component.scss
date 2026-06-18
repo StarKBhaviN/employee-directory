@@ -1,0 +1,30 @@
+.table-wrapper {
+  overflow-x: auto;
+}
+table {
+  width: 100%;
+}
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  color: #888;
+}
+.empty-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
+}
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.status-badge.active {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+.status-badge.inactive {
+  background-color: #fbe9e7;
+  color: #c62828;
+}

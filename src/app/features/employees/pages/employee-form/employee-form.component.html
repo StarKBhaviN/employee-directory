@@ -1,0 +1,59 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ isEditMode() ? 'Edit Employee' : 'Add Employee' }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Full Name</mat-label>
+        <input matInput formControlName="fullName" placeholder="Enter full name">
+        @if (form.get('fullName')?.hasError('required') && form.get('fullName')?.touched) {
+          <mat-error>Full Name is required</mat-error>
+        }
+        @if (form.get('fullName')?.hasError('minlength') && form.get('fullName')?.touched) {
+          <mat-error>Minimum 3 characters required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput formControlName="email" placeholder="Enter email" type="email">
+        @if (form.get('email')?.hasError('required') && form.get('email')?.touched) {
+          <mat-error>Email is required</mat-error>
+        }
+        @if (form.get('email')?.hasError('email') && form.get('email')?.touched) {
+          <mat-error>Enter a valid email</mat-error>
+        }
+        @if (form.get('email')?.hasError('forbiddenDomain') && form.get('email')?.touched) {
+          <mat-error>Emails from test.com are not allowed</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Department</mat-label>
+        <input matInput formControlName="department" placeholder="Enter department">
+        @if (form.get('department')?.hasError('required') && form.get('department')?.touched) {
+          <mat-error>Department is required</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Status</mat-label>
+        <mat-select formControlName="status">
+          <mat-option value="Active">Active</mat-option>
+          <mat-option value="Inactive">Inactive</mat-option>
+        </mat-select>
+        @if (form.get('status')?.hasError('required') && form.get('status')?.touched) {
+          <mat-error>Status is required</mat-error>
+        }
+      </mat-form-field>
+
+      <div class="form-actions">
+        <button mat-button type="button" routerLink="/employees">Cancel</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid">
+          {{ isEditMode() ? 'Update' : 'Add' }} Employee
+        </button>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
