@@ -1,59 +1,149 @@
-# EmployeeDirectory
+# Employee Directory
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.16.
+A complete Angular application for managing employee records with Firebase Realtime Database integration.
 
-## Development server
+## Project Overview
 
-To start a local development server, run:
+This is an Employee Directory application built with Angular 21 that allows users to view, search, filter, sort, add, edit, and delete employees. The application uses Firebase Realtime Database for data persistence with a localStorage backup mechanism.
+
+## Features
+
+- **View Employees** - Display all employees in a Material table
+- **Search** - Search employees by name with debounced input (300ms)
+- **Filter** - Filter employees by status (All, Active, Inactive)
+- **Sort** - Sort employees by name (A-Z or Z-A)
+- **Add Employee** - Add new employees with form validation
+- **Edit Employee** - Edit existing employee details
+- **Delete Employee** - Delete employees with confirmation dialog
+- **View Details** - View detailed employee information
+- **Offline Support** - localStorage backup when Firebase is unavailable
+- **Custom Validation** - Rejects emails from `@test.com` domain
+- **Lazy Loading** - Employee routes are lazy loaded for better performance
+
+## Tech Stack
+
+- **Angular 21** - Latest stable Angular framework
+- **Angular Material** - Material Design UI components
+- **RxJS** - Reactive programming (debounced search)
+- **Firebase Realtime Database** - Cloud data persistence
+- **localStorage** - Backup data persistence
+- **Angular Signals** - State management
+- **TypeScript** - Strict type checking enabled
+- **Vitest** - Unit testing framework
+
+## Folder Structure
+
+```
+src/app
+├── core
+│   └── services
+│       ├── employee-api.service.ts       # Firebase CRUD operations
+│       ├── employee-store.service.ts     # State management with Signals
+│       └── local-storage.service.ts      # localStorage persistence
+│
+├── features
+│   └── employees
+│       ├── pages
+│       │   ├── employee-list/            # List page (container)
+│       │   ├── employee-form/            # Add/Edit page (container)
+│       │   └── employee-details/         # Details page (container)
+│       ├── components
+│       │   ├── employee-table/           # Table component (presentational)
+│       │   ├── employee-filter/          # Filter component (presentational)
+│       │   └── delete-confirm-dialog/    # Delete dialog (presentational)
+│       ├── models
+│       │   └── employee.model.ts         # Employee interface
+│       └── employee.routes.ts            # Feature routes (lazy loaded)
+│
+├── shared
+│   └── validators
+│       └── email-domain.validator.ts     # Custom email domain validator
+│
+├── app.routes.ts                         # Root routes
+├── app.config.ts                         # App configuration
+├── app.ts                                # Root component
+├── app.html                              # Root template
+└── app.scss                              # Root styles
+```
+
+## Setup Instructions
+
+### Prerequisites
+
+- Node.js 18+
+- npm 9+
+
+### Install
+
+```bash
+npm install
+```
+
+### Run
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Navigate to `http://localhost:4200/`.
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+### Build
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+### Run Tests
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## Architectural Decisions
 
-For end-to-end (e2e) testing, run:
+### Why Angular Signals?
 
-```bash
-ng e2e
-```
+Angular Signals were chosen for state management because:
+- They are the recommended approach in modern Angular
+- Simple and beginner-friendly API
+- No external dependencies needed
+- Built-in reactivity with `computed()` for derived state
+- Fine-grained change detection
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### Why localStorage Backup?
 
-## Additional Resources
+localStorage serves as a fallback mechanism:
+- On startup, data loads from Firebase first
+- If Firebase fails, cached data from localStorage is used
+- Every data change syncs to both Firebase and localStorage
+- Ensures the app works even without internet
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+### Why Angular Material?
+
+Angular Material was chosen because:
+- Official Angular UI component library
+- Follows Material Design guidelines
+- Consistent and accessible components
+- Well-integrated with Angular forms and CDK
+
+### Container/Presentational Pattern
+
+- **Pages** (containers) handle business logic, data fetching, and routing
+- **Components** (presentational) handle UI rendering only and communicate via inputs/outputs
+- This separation makes components reusable and easier to test
+
+## Assumptions
+
+- Firebase Realtime Database is publicly accessible (no authentication rules)
+- Employee IDs are generated by Firebase (push keys)
+- The application is a single-user assignment project
+- No pagination is needed for the current scale
+
+## Future Improvements
+
+- **Authentication** - Add Firebase Auth for user login
+- **Pagination** - Add server-side pagination for large datasets
+- **Role Management** - Admin vs. viewer roles
+- **Export** - Export employee data to CSV/PDF
+- **Dark Mode** - Toggle between light and dark themes
+- **Bulk Operations** - Select and delete multiple employees
