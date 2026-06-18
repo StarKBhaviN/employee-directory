@@ -1,149 +1,62 @@
-# Employee Directory
+Employee Directory Project
 
-A complete Angular application for managing employee records with Firebase Realtime Database integration.
+This is an Angular application for an employee directory. It uses Firebase for the database and also saves to local storage.
 
-## Project Overview
+Features:
+- View all employees in a list
+- Search for employees by name
+- Filter by status (Active or Inactive)
+- Sort the list A-Z or Z-A
+- Add, edit, and delete employees
+- See employee details
+- Validation to stop @test.com emails
+- Lazy loading for the routes
 
-This is an Employee Directory application built with Angular 21 that allows users to view, search, filter, sort, add, edit, and delete employees. The application uses Firebase Realtime Database for data persistence with a localStorage backup mechanism.
+Technologies used:
+- Angular 21
+- Angular Material
+- RxJS
+- Firebase
+- LocalStorage
+- Signals for state
+- TypeScript
+- Vitest for testing
 
-## Features
+Folder Structure:
+src/app/core/services - has the api and store and local storage services
+src/app/features/employees/pages - has the list, form, and details pages
+src/app/features/employees/components - has the table, filter, and delete dialog
+src/app/features/employees/models - has the employee model
+src/app/shared/validators - has the custom email validator
+src/app/ - has the main app files like routing and app component
 
-- **View Employees** - Display all employees in a Material table
-- **Search** - Search employees by name with debounced input (300ms)
-- **Filter** - Filter employees by status (All, Active, Inactive)
-- **Sort** - Sort employees by name (A-Z or Z-A)
-- **Add Employee** - Add new employees with form validation
-- **Edit Employee** - Edit existing employee details
-- **Delete Employee** - Delete employees with confirmation dialog
-- **View Details** - View detailed employee information
-- **Offline Support** - localStorage backup when Firebase is unavailable
-- **Custom Validation** - Rejects emails from `@test.com` domain
-- **Lazy Loading** - Employee routes are lazy loaded for better performance
+How to run the project:
 
-## Tech Stack
-
-- **Angular 21** - Latest stable Angular framework
-- **Angular Material** - Material Design UI components
-- **RxJS** - Reactive programming (debounced search)
-- **Firebase Realtime Database** - Cloud data persistence
-- **localStorage** - Backup data persistence
-- **Angular Signals** - State management
-- **TypeScript** - Strict type checking enabled
-- **Vitest** - Unit testing framework
-
-## Folder Structure
-
-```
-src/app
-├── core
-│   └── services
-│       ├── employee-api.service.ts       # Firebase CRUD operations
-│       ├── employee-store.service.ts     # State management with Signals
-│       └── local-storage.service.ts      # localStorage persistence
-│
-├── features
-│   └── employees
-│       ├── pages
-│       │   ├── employee-list/            # List page (container)
-│       │   ├── employee-form/            # Add/Edit page (container)
-│       │   └── employee-details/         # Details page (container)
-│       ├── components
-│       │   ├── employee-table/           # Table component (presentational)
-│       │   ├── employee-filter/          # Filter component (presentational)
-│       │   └── delete-confirm-dialog/    # Delete dialog (presentational)
-│       ├── models
-│       │   └── employee.model.ts         # Employee interface
-│       └── employee.routes.ts            # Feature routes (lazy loaded)
-│
-├── shared
-│   └── validators
-│       └── email-domain.validator.ts     # Custom email domain validator
-│
-├── app.routes.ts                         # Root routes
-├── app.config.ts                         # App configuration
-├── app.ts                                # Root component
-├── app.html                              # Root template
-└── app.scss                              # Root styles
-```
-
-## Setup Instructions
-
-### Prerequisites
-
-- Node.js 18+
-- npm 9+
-
-### Install
-
-```bash
+Install everything:
 npm install
-```
 
-### Run
-
-```bash
+Run the app:
 ng serve
-```
+Then go to http://localhost:4200/
 
-Navigate to `http://localhost:4200/`.
-
-### Build
-
-```bash
+Build:
 ng build
-```
 
-### Run Tests
-
-```bash
+Run tests:
 ng test
-```
 
-## Architectural Decisions
+Why I chose these things:
+- Signals: I used Signals because it's the new way in Angular and it's easier to learn.
+- Local storage: I added it just in case Firebase doesn't work, so the app still runs.
+- Angular Material: I used it because it looks good and is made for Angular.
+- Architecture: I separated the pages from the dumb components to make it cleaner.
 
-### Why Angular Signals?
+Assumptions:
+- Firebase is open without auth
+- Firebase makes the IDs
+- It's just a simple project
 
-Angular Signals were chosen for state management because:
-- They are the recommended approach in modern Angular
-- Simple and beginner-friendly API
-- No external dependencies needed
-- Built-in reactivity with `computed()` for derived state
-- Fine-grained change detection
-
-### Why localStorage Backup?
-
-localStorage serves as a fallback mechanism:
-- On startup, data loads from Firebase first
-- If Firebase fails, cached data from localStorage is used
-- Every data change syncs to both Firebase and localStorage
-- Ensures the app works even without internet
-
-### Why Angular Material?
-
-Angular Material was chosen because:
-- Official Angular UI component library
-- Follows Material Design guidelines
-- Consistent and accessible components
-- Well-integrated with Angular forms and CDK
-
-### Container/Presentational Pattern
-
-- **Pages** (containers) handle business logic, data fetching, and routing
-- **Components** (presentational) handle UI rendering only and communicate via inputs/outputs
-- This separation makes components reusable and easier to test
-
-## Assumptions
-
-- Firebase Realtime Database is publicly accessible (no authentication rules)
-- Employee IDs are generated by Firebase (push keys)
-- The application is a single-user assignment project
-- No pagination is needed for the current scale
-
-## Future Improvements
-
-- **Authentication** - Add Firebase Auth for user login
-- **Pagination** - Add server-side pagination for large datasets
-- **Role Management** - Admin vs. viewer roles
-- **Export** - Export employee data to CSV/PDF
-- **Dark Mode** - Toggle between light and dark themes
-- **Bulk Operations** - Select and delete multiple employees
+Things to add later:
+- Login screen
+- Pagination
+- Export to PDF
