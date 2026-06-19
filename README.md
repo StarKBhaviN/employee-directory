@@ -1,4 +1,6 @@
-Employee Directory Project
+## CLIENT_DEMO
+
+## Employee Directory Project
 
 This is an Angular application for an employee directory. It uses JSON Server for a local mock database and also saves to local storage.
 
